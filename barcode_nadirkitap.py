@@ -17,7 +17,6 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 
-
 # CONFIGS
 OUTPUT_FILE = "nadirkitap_results.xlsx"
 BASE_URL = "https://www.nadirkitap.com/kitapara.php?ara=aramayap&ref=anasayfa&tip=kitap&isbn={isbn}"
@@ -25,7 +24,29 @@ scraper = cloudscraper.create_scraper()
 
 
 
-# SCRAPER
+# EXCEL COLUMNS (These are the data that will be scraped :P )
+COLUMNS = [
+    "ISBN",
+    "Book Name",
+    "Author",
+    "Number of Listings",
+    "Prices",
+    "Average Price",
+    "Min Price",
+    "Max Price",
+    "1★ avg",
+    "2★ avg",
+    "3★ avg",
+    "4★ avg",
+    "5★ avg",
+    "\"Yeni\" Avg",
+    "URL",
+    "Scrape Date"
+]
+
+
+
+# THE SCRAPER
 def scrape_isbn(isbn: str):
     url = BASE_URL.format(isbn=isbn)
     print(url)
@@ -93,29 +114,8 @@ def scrape_isbn(isbn: str):
             "Source URL": url,
             "Scraped At": datetime.now().strftime("%Y-%m-%d %H:%M")
         })
-
     return results
 
-
-# EXCEL COLUMNS
-COLUMNS = [
-    "ISBN",
-    "Book Name",
-    "Author",
-    "Number of Listings",
-    "Prices",
-    "Average Price",
-    "Min Price",
-    "Max Price",
-    "1★ avg",
-    "2★ avg",
-    "3★ avg",
-    "4★ avg",
-    "5★ avg",
-    "\"Yeni\" Avg",
-    "URL",
-    "Scrape Date"
-]
 
 # EXPORTING TO AN EXCEL
 def save_excel(records):
@@ -137,10 +137,15 @@ def save_excel(records):
     print("Saved to Excel")
 
 
+
+
 # GLOBAL STATES
 seen = set()
 records = []
 cap = cv2.VideoCapture(0)
+
+
+
 
 
 # PROCESSING ISBN
@@ -235,7 +240,6 @@ def process_isbn(isbn, source_url):
 
 
 # TKINTER GUI
-
 root = tk.Tk()
 root.title("ISBN Scanner")
 
@@ -268,8 +272,8 @@ def on_close():
 
 root.protocol("WM_DELETE_WINDOW", on_close)
 
-# CAMERA LOOP + GREEN BOX FIX
 
+# CAMERA LOOP + GREEN BOX FIX
 def update_frame():
     ret, frame = cap.read()
     if ret:
@@ -299,8 +303,14 @@ def update_frame():
     root.after(10, update_frame)
 
 
-# start
+# running each one 
 update_frame()
 root.mainloop()
-
 cap.release()
+
+
+#  /\_/\
+# ( o.o )
+#  > ^ <
+# Mr. Meow
+
